@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">TagAlbum</string>
+    <string name="item_count">(%d)</string>
+    <string name="toolbar_title">@string/app_name</string>
+    <string name="content_description_picture">picture</string>
+    <string name="add_tags">添加标签</string>
+    <string name="textinput_addtags">添加标签</string>
+    <string name="search_hint">搜索</string>
+</resources>
