@@ -46,8 +46,9 @@ public class PhotoActivity extends BaseActivity {
     private static final String TAG = "PhotoActivity";
     /**用于从Intent中提取序列化的对象的图片信息的KEY*/
     public static final String KEY_PHOTO = "PHOTO";
+    public static final String KEY_PHOTOPOS = "PHOTO_POS";
     private DialogFragment dialogFragment;
-    private Toolbar toolbar;
+    protected Toolbar toolbar;
     private AlbumItem photo;
     private ChipGroup chipGroup;
     private TagViewModel tagViewModel;
@@ -60,7 +61,6 @@ public class PhotoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo);
-
         chipGroup = findViewById(R.id.chip_group);
 
         photo = getIntent().getExtras().getParcelable(KEY_PHOTO);

@@ -33,6 +33,7 @@ public class AlbumActivity extends BaseActivity {
     private RecyclerView recyclerView;
     private AlbumAdapter recyclerViewAdapter;
     private int columnCount;
+    private int albumPos;
 
     /**
      * 在该活动被创建时会被调用.
@@ -64,17 +65,17 @@ public class AlbumActivity extends BaseActivity {
 
     private boolean retrieveAlbum(Bundle savedInstanceState){
         //todo AlbumActivity状态恢复
-        int pos=-1;
+        albumPos=-1;
         if (savedInstanceState != null && savedInstanceState.containsKey(KEY_ALBUMPOS)) {
-            pos = savedInstanceState.getInt(KEY_ALBUMPOS);
+            albumPos = savedInstanceState.getInt(KEY_ALBUMPOS);
         } else {
-            pos = getIntent().getIntExtra(KEY_ALBUMPOS,-1);
+            albumPos = getIntent().getIntExtra(KEY_ALBUMPOS,-1);
         }
-        if (pos==-1||MediaProvider.getAlbums()==null){
+        if (albumPos==-1||MediaProvider.getAlbums()==null){
             getAlbumError();
             return false;
         }
-        album = MediaProvider.getAlbums().get(pos);
+        album = MediaProvider.getAlbums().get(albumPos);
         return true;
     }
 
@@ -108,7 +109,7 @@ public class AlbumActivity extends BaseActivity {
      */
     protected void setRecyclerView() {
         recyclerView = findViewById(R.id.recycler_view);
-        recyclerViewAdapter = new AlbumAdapter(this);
+        recyclerViewAdapter = new AlbumAdapter(this,albumPos);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, columnCount));
     }

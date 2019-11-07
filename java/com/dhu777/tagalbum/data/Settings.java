@@ -17,7 +17,7 @@ public class Settings {
         return instance;
     }
 
-    private int albumMininum = 2;
+    private int albumMininum = 5;
     private int columnCount = 3;
     private int style = Style.LIST;
     private boolean scanHidden = false;

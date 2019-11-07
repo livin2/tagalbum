@@ -2,39 +2,29 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.PhotoActivity">
-
+    android:layout_height="match_parent">
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/photo_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="?android:attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent">
-        <!-- todo use ViewPager to prevent crashes with PhotoView-->
-        <com.github.chrisbanes.photoview.PhotoView
-            android:id="@+id/photo_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintTop_toTopOf="@id/toolbar" />
-    </FrameLayout>
-
+        android:layout_height="wrap_content"
+        android:background="@color/black_64"
+        android:animateLayoutChanges="true"
+        app:layout_constraintTop_toTopOf="parent"/>
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chip_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingLeft="5dp"
+        android:animateLayoutChanges="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
         <!-- Chips can be declared here, or added dynamically. -->
 
     </com.google.android.material.chip.ChipGroup>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -31,7 +31,6 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
     private static final String TAG = "MainActivity";
     private List<AlbumBucket> albums;
-    private Toolbar toolbar;
     private RecyclerView recyclerView;
     private MediaProvider mediaProvider;
     private MainAdapter recyclerViewAdapter;
@@ -81,14 +80,15 @@ public class MainActivity extends BaseActivity {
     /**
      * 配置主页的标题栏.
      */
+    @Override
     protected void setToolbar(){
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        super.setToolbar();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(getString(R.string.toolbar_title));
         }
     }
+
 
     /**
      * 为菜单渲染设置菜单项.

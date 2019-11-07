@@ -15,7 +15,12 @@ import com.dhu777.tagalbum.data.entity.AlbumBucket;
 import com.dhu777.tagalbum.data.entity.AlbumItem;
 import com.dhu777.tagalbum.data.entity.Gif;
 import com.dhu777.tagalbum.data.entity.Picture;
+import com.dhu777.tagalbum.ui.AlbumActivity;
 import com.dhu777.tagalbum.ui.PhotoActivity;
+import com.dhu777.tagalbum.ui.PhotoPureActivity;
+import com.dhu777.tagalbum.ui.PhotoViewPageActivity;
+import com.dhu777.tagalbum.ui.ViewPageActivity;
+import com.github.chrisbanes.photoview.PhotoView;
 
 /**
  * 缩略图相册列表视图的适配器
@@ -32,8 +37,17 @@ public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
     /** 相册视图中的缩略图元素的类型: 动态图片.*/
     public static final int VIEW_TYPE_GIF = 1;
 
-    public AlbumAdapter(Context context){
+    private int albumPos;
+    public AlbumAdapter(Context context,int albumpos){
+        this.albumPos =albumpos;
     }
+
+    private boolean isViewPage = true;
+    public AlbumAdapter setViewPage(boolean viewPage) {
+        isViewPage = viewPage;
+        return this;
+    }
+
 
     /**
      * 返回本适配器相册数据在position位置的元素的类型.
@@ -81,7 +95,7 @@ public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
      * @see RecyclerView.Adapter#onBindViewHolder(RecyclerView.ViewHolder, int)
      */
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
         final AlbumItem item = getData().getAlbumItems().get(position);
         final AlbumItemHolder holder = (AlbumItemHolder)viewHolder;
         holder.setAlbumItem(item);
@@ -89,8 +103,16 @@ public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
             @Override
             public void onClick(View v) {
                 Context context =  holder.itemView.getContext();
-                Intent intent = new Intent(context, PhotoActivity.class);
+                //todo edit
+                Intent intent;
+                if(isViewPage){
+                    intent = new Intent(context, PhotoViewPageActivity.class);
+                    intent.putExtra(AlbumActivity.KEY_ALBUMPOS,albumPos);
+                }else
+                    intent = new Intent(context, PhotoPureActivity.class);
                 intent.putExtra(PhotoActivity.KEY_PHOTO,item);
+                intent.putExtra(PhotoActivity.KEY_PHOTOPOS,position);
+
                 context.startActivity(intent);
             }
         });

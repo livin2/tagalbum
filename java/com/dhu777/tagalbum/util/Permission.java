@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat;
  * 用以检查权限的工具类.
  */
 public class Permission {
-    public static final int REQUEST_CODE_WRITE = 16;
+    public static final int REQUEST_CODE_WRITE = 77;
     public static boolean checkWriteExternal(Activity context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             final int read = ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);

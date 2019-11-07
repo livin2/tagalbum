@@ -107,7 +107,7 @@ public class SearchActivity extends BaseActivity implements Observer<List<TagVie
      */
     protected void setRecyclerView() {
         recyclerView = findViewById(R.id.recycler_view);
-        recyclerViewAdapter = new AlbumAdapter(this);
+        recyclerViewAdapter = new AlbumAdapter(this,0).setViewPage(false);
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new GridLayoutManager(this, columnCount));
     }

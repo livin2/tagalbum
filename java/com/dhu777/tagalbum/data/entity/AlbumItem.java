@@ -28,6 +28,7 @@ public abstract class AlbumItem extends MediaInfo implements Parcelable {
     private Uri uri;
     private long bucketId;
     private long dateTaken;
+    private Integer color;
 
     public AlbumItem() {
     }
@@ -123,7 +124,14 @@ public abstract class AlbumItem extends MediaInfo implements Parcelable {
     }
 
 
+    public Integer getColor() {
+        return color;
+    }
 
+    public AlbumItem setColor(Integer color) {
+        this.color = color;
+        return this;
+    }
 
     public String getPath() {
         return path;
