@@ -111,14 +111,18 @@ public class AsyncRepository  extends TagRepository{
             @Override
             public void doInBackground() {
                 if(tagJoin == null
-                        ||tagJoin.getTagId()==null||tagJoin.getMediaId()==null)
+                        ||tagJoin.getTagId()==null||tagJoin.getMediaId()==null){
+                    Log.d(TAG, "delete fail");
                     return;
+                }
+
                 Long tid = tagJoin.getTagId();
                 DB.tagJoinDao().delete(tagJoin);
 
                 List<TagJoin> tjlist = DB.tagJoinDao().getByTagId(tid);
                 if(tjlist==null||tjlist.size()==0)
                     DB.tagDao().delete(new Tag(tagJoin.getTagId(),null));
+                Log.d(TAG, "deleted");
             }
         }).execute();
         return true;

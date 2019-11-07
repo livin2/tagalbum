@@ -1,10 +1,13 @@
 package com.dhu777.tagalbum.data;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 import com.dhu777.tagalbum.data.persistent.entity.MediaInfo;
 import com.dhu777.tagalbum.data.persistent.entity.Tag;
@@ -13,17 +16,25 @@ import com.dhu777.tagalbum.data.persistent.entity.TagView;
 import com.dhu777.tagalbum.data.persistent.repository.AsyncRepository;
 import com.dhu777.tagalbum.data.persistent.repository.TagRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 配合应用生命周期提供观察者模式实现的组件.
  */
 public class TagViewModel extends AndroidViewModel {
-    private TagRepository tagRepository;
+    private static final String TAG = "TagViewModel";
+    private final TagRepository tagRepository;
+
+    private final LiveData<List<TagView>> tagJ;
+    private final MutableLiveData<List<String>> tagVals = new MutableLiveData();
 
     public TagViewModel(@NonNull Application application) {
         super(application);
         tagRepository = AsyncRepository.getInstance(application);
+        tagJ = Transformations.switchMap(tagVals, (val) -> {
+            return tagRepository.getTagByTagList(val);
+        });
     }
 
     /**
@@ -54,9 +65,16 @@ public class TagViewModel extends AndroidViewModel {
      * @param val 目标标签值
      * @return 返回支持监听数据变换的类型LiveData.
      */
+
     public LiveData<List<TagView>> getTagJoinByTagList(List<String> val){
-        return tagRepository.getTagByTagList(val);
+        tagVals.setValue(val);
+        return tagJ;
     }
+
+//    public void getTagL() {
+//        Log.d(TAG, "getTagL:"+tagVals.getValue().size());
+//        Log.d(TAG, "getTagL:"+tagVals.getValue());
+//    }
 
     /**
      * 为某图片删除标签.

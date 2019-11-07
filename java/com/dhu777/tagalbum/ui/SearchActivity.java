@@ -84,8 +84,20 @@ public class SearchActivity extends BaseActivity implements Observer<List<TagVie
     @Override
     public void onChanged(List<TagView> tagViews) {
         Log.d(TAG, "onChanged: dataSize:"+tagViews.size());
-        if(tagViews.size()<=0)
+        Log.d(TAG, "onChanged: querylist:"+querylist.size());
+        for(String val:querylist)
+            Log.d(TAG, "onChanged: queryi:"+val);
+        if(tagViews.size()<=0){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    recyclerViewAdapter.setData(new AlbumBucket());
+                    recyclerViewAdapter.notifyDataSetChanged();
+                }
+            });
             return;
+        }
+
         Log.d(TAG, "onChanged: call");
         mediaSearcher.setCallback(new MediaProvider.OnMediaLoadedCallback() {
             @Override
@@ -172,7 +184,7 @@ public class SearchActivity extends BaseActivity implements Observer<List<TagVie
         }
         Log.d(TAG, "onChipRemove:size:"+querylist.size());
         //todo remove search result
-        tagViewModel.getTagJoinByTagList(querylist).observe(this, this);
+        tagViewModel.getTagJoinByTagList(querylist);
     }
 
     /**
@@ -183,7 +195,7 @@ public class SearchActivity extends BaseActivity implements Observer<List<TagVie
         Integer index = querylist.size();
         chip.setTag(index);
         querylist.add(chip.getText().toString());
-        tagViewModel.getTagJoinByTagList(querylist).observe(this, this);
+        tagViewModel.getTagJoinByTagList(querylist);
         Log.d(TAG, "onChipAdd:size:"+querylist.size());
     }
 
