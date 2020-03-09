@@ -1,5 +1,7 @@
 # TagAlbum
 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Travis-ci](https://api.travis-ci.org/livin2/tagalbum.svg)]( https://travis-ci.org/livin2/tagalbum )
+
  An android gallery that manages photos through tags. 
 
 ## Sceenshots
