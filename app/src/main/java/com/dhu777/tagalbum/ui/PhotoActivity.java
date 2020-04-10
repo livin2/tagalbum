@@ -1,5 +1,6 @@
 package com.dhu777.tagalbum.ui;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -36,12 +37,14 @@ import com.dhu777.tagalbum.util.PaletteHelper;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
 /**
  * 显示大图的Activity页面组件.
  */
+@Deprecated
 public class PhotoActivity extends BaseActivity {
     private static final String TAG = "PhotoActivity";
     /**用于从Intent中提取序列化的对象的图片信息的KEY*/
@@ -63,11 +66,13 @@ public class PhotoActivity extends BaseActivity {
         setContentView(R.layout.activity_photo);
         chipGroup = findViewById(R.id.chip_group);
 
+
         photo = getIntent().getExtras().getParcelable(KEY_PHOTO);
         if(photo == null){
             Log.d(TAG, "onCreate: null");
             return;
         }
+        Log.d(TAG, "onCreate: called");
         if(photo instanceof Gif)
             loadGif(photo);
         else
@@ -213,6 +218,8 @@ public class PhotoActivity extends BaseActivity {
 //                    public void onLoadCleared(@Nullable Drawable placeholder) {
 //                    }
 //                });
+
+        Log.d(TAG, "loadPhotoTarget: called");
         loadPhoto(item);
         Bitmap bitmap = BitmapFactory.decodeFile(item.getPath());
         PaletteHelper.getDomin(bitmap, new PaletteHelper.getDominCallback() {
@@ -223,6 +230,8 @@ public class PhotoActivity extends BaseActivity {
                 Log.d(TAG, "colorTag:"+swatch);
                 Log.d(TAG, "colorTag:"+msg);
                 notifyMsg(msg);
+//                View v = getWindow().getDecorView().findViewById(R.id.photo_view);
+//                Snackbar.make(v, "test color", Snackbar.LENGTH_SHORT).setTextColor(swatch.getRgb());
             }
         });
 
@@ -268,6 +277,7 @@ public class PhotoActivity extends BaseActivity {
                 return true;
             case R.id.test_a:
                 return true;
+
             case R.id.test_b:
                 return true;
             default:return super.onOptionsItemSelected(item);

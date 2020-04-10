@@ -3,6 +3,8 @@ package com.dhu777.tagalbum.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,9 +15,11 @@ import android.view.WindowInsets;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.palette.graphics.Palette;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -24,6 +28,8 @@ import com.dhu777.tagalbum.R;
 import com.dhu777.tagalbum.data.entity.AlbumItem;
 import com.dhu777.tagalbum.data.entity.Gif;
 import com.dhu777.tagalbum.data.persistent.entity.TagView;
+import com.dhu777.tagalbum.util.ColorTag;
+import com.dhu777.tagalbum.util.PaletteHelper;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -69,6 +75,21 @@ public class PhotoPureActivity extends PhotoAbsActivity {
                 .load(item.getPath())
                 .apply(item.getGlideRequestOptions(photoView.getContext()))
                 .into(photoView);
+
+        Bitmap bitmap = BitmapFactory.decodeFile(item.getPath());
+        PaletteHelper.getDomin(bitmap, new PaletteHelper.getDominCallback() {
+            @Override
+            public void onLoaded(@NonNull Palette.Swatch swatch) {
+                toolbar.setBackgroundColor(swatch.getRgb());
+                toolbar.getBackground().setAlpha(222);
+                String msg = ColorTag.tagOf(swatch);
+                Log.d(TAG, "colorTag:"+swatch);
+                Log.d(TAG, "colorTag:"+msg);
+                notifyMsg(msg);
+//                View v = getWindow().getDecorView().findViewById(R.id.photo_view);
+//                Snackbar.make(v, "test color", Snackbar.LENGTH_SHORT).setTextColor(swatch.getRgb());
+            }
+        });
     }
 
     /**

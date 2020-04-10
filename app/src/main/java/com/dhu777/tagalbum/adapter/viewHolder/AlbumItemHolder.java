@@ -3,10 +3,12 @@ package com.dhu777.tagalbum.adapter.viewHolder;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.dhu777.tagalbum.R;
+import com.dhu777.tagalbum.adapter.recyclerView.selection.AlbumItemDetailsLookup;
 import com.dhu777.tagalbum.data.entity.AlbumBucket;
 import com.dhu777.tagalbum.data.entity.AlbumItem;
 import com.dhu777.tagalbum.data.entity.Gif;
@@ -16,7 +18,7 @@ import com.dhu777.tagalbum.data.entity.Picture;
  * 缩略图视图持有类.
  * 继承自{@link RecyclerView.ViewHolder}
  */
-public class AlbumItemHolder extends RecyclerView.ViewHolder{
+public class AlbumItemHolder extends RecyclerView.ViewHolder {
     private AlbumItem albumItem;
 
     /**
@@ -69,4 +71,6 @@ public class AlbumItemHolder extends RecyclerView.ViewHolder{
                 .apply(albumItem.getGlideRequestOptions(imageView.getContext()))
                 .into(imageView);
     }
+
+
 }

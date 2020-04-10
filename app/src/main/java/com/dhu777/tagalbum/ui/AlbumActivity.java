@@ -4,22 +4,35 @@ import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import androidx.appcompat.view.ActionMode;
+
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.selection.OnDragInitiatedListener;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dhu777.tagalbum.R;
 import com.dhu777.tagalbum.adapter.recyclerView.AlbumAdapter;
+import com.dhu777.tagalbum.adapter.recyclerView.selection.ActionModeController;
+import com.dhu777.tagalbum.adapter.recyclerView.selection.AlbumItemDetailsLookup;
+import com.dhu777.tagalbum.adapter.recyclerView.selection.AlbumItemKeyProvider;
 import com.dhu777.tagalbum.data.Settings;
 import com.dhu777.tagalbum.data.entity.AlbumBucket;
+import com.dhu777.tagalbum.data.entity.AlbumItem;
 import com.dhu777.tagalbum.data.provider.MediaProvider;
 import com.dhu777.tagalbum.util.Permission;
+
+import java.util.Iterator;
 
 /**
  * 相册Activity页面组件.本页面显示某个相簿所有的缩略图.
@@ -34,6 +47,9 @@ public class AlbumActivity extends BaseActivity {
     private AlbumAdapter recyclerViewAdapter;
     private int columnCount;
     private int albumPos;
+    private SelectionTracker selectionTracker;
+    private ActionMode actionMode;
+    private MenuItem selectedItemCount;
 
     /**
      * 在该活动被创建时会被调用.
@@ -50,6 +66,7 @@ public class AlbumActivity extends BaseActivity {
         setToolbar(album.getTitle());
         setRecyclerView();
         recyclerViewAdapter.setData(album);
+        setSelectionTracker();
     }
 
     private boolean handleSearch(){
@@ -114,6 +131,44 @@ public class AlbumActivity extends BaseActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, columnCount));
     }
 
+    protected void setSelectionTracker(){
+        selectionTracker = new SelectionTracker.Builder<>(
+                "my-selection-id",
+                recyclerView,
+                new AlbumItemKeyProvider(1,recyclerViewAdapter.getData().getAlbumItems()),
+                new AlbumItemDetailsLookup(recyclerView,recyclerViewAdapter),
+                StorageStrategy.createLongStorage()
+        ).withOnDragInitiatedListener(new OnDragInitiatedListener() {
+            @Override
+            public boolean onDragInitiated(@NonNull MotionEvent e) {
+                Log.d(TAG, "onDragInitiated");
+                return true;
+            }
+        }).build();
+
+        selectionTracker.addObserver(new SelectionTracker.SelectionObserver() {
+            @Override
+            public void onSelectionChanged() {
+                super.onSelectionChanged();
+                if (selectionTracker.hasSelection() && actionMode == null) {
+                    actionMode = startSupportActionMode(new ActionModeController
+                            (AlbumActivity.this, selectionTracker));
+                    selectedItemCount.setTitle(""+selectionTracker.getSelection().size());
+                } else if (!selectionTracker.hasSelection() && actionMode != null) {
+                    actionMode.finish();
+                    actionMode = null;
+                } else {
+                    selectedItemCount.setTitle(""+selectionTracker.getSelection().size());
+                }
+                Iterator<AlbumItem> itemIterable = selectionTracker.getSelection().iterator();
+                while (itemIterable.hasNext()) {
+                    Log.i(TAG, itemIterable.next().getName());
+                }
+            }
+        });
+        recyclerViewAdapter.setSelectionTracker(selectionTracker);
+    }
+
     /**
      * 配置标题栏.
      */
@@ -127,6 +182,13 @@ public class AlbumActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_album, menu);
+        selectedItemCount = menu.findItem(R.id.action_item_count);
+        return super.onCreateOptionsMenu(menu);
+    }
+
     /**
      * 处理菜单项的选择操作.主页处理左上角的回退操作.
      * @param item 被选择的菜单项
@@ -138,6 +200,9 @@ public class AlbumActivity extends BaseActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.action_clear:
+                selectionTracker.clearSelection();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

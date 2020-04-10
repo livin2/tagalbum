@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dhu777.tagalbum.R;
@@ -42,12 +43,17 @@ public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
         this.albumPos =albumpos;
     }
 
+    private SelectionTracker selectionTracker;
+    public AlbumAdapter setSelectionTracker(SelectionTracker selectionTracker) {
+        this.selectionTracker = selectionTracker;
+        return this;
+    }
+
     private boolean isViewPage = true;
     public AlbumAdapter setViewPage(boolean viewPage) {
         isViewPage = viewPage;
         return this;
     }
-
 
     /**
      * 返回本适配器相册数据在position位置的元素的类型.
@@ -99,6 +105,7 @@ public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
         final AlbumItem item = getData().getAlbumItems().get(position);
         final AlbumItemHolder holder = (AlbumItemHolder)viewHolder;
         holder.setAlbumItem(item);
+        holder.itemView.setActivated(selectionTracker.isSelected(item));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,4 +132,6 @@ public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
     public int getItemCount() {
         return getData().getAlbumItems().size();
     }
+
+
 }
