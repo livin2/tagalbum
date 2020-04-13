@@ -1,9 +1,11 @@
 package com.dhu777.tagalbum.data.persistent.repository;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.dhu777.tagalbum.data.persistent.AppDataBase;
@@ -22,12 +24,13 @@ public class AsyncRepository  extends TagRepository{
     private static TagRepository INSTANCE;
     private AppDataBase DB;
     private AsyncRepository(){}
-    public static TagRepository getInstance(Application application) {
+    public static TagRepository getInstance(@NonNull final Context context) {
         if (INSTANCE==null){
             INSTANCE = new AsyncRepository();
             //todo AppDataBase.getInMemoryInstance
-            ((AsyncRepository) INSTANCE).DB = AppDataBase.getInstance(application);
+            ((AsyncRepository) INSTANCE).DB = AppDataBase.getInstance(context);
         }
+        Log.d(TAG, "getInstance: "+INSTANCE);
         return INSTANCE;
     }
 

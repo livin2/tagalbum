@@ -30,6 +30,8 @@ import com.dhu777.tagalbum.data.Settings;
 import com.dhu777.tagalbum.data.entity.AlbumBucket;
 import com.dhu777.tagalbum.data.entity.AlbumItem;
 import com.dhu777.tagalbum.data.provider.MediaProvider;
+import com.dhu777.tagalbum.opt.AddColorTag;
+import com.dhu777.tagalbum.opt.Delete;
 import com.dhu777.tagalbum.util.Permission;
 
 import java.util.Iterator;
@@ -84,6 +86,7 @@ public class AlbumActivity extends BaseActivity {
         //todo AlbumActivity状态恢复
         albumPos=-1;
         if (savedInstanceState != null && savedInstanceState.containsKey(KEY_ALBUMPOS)) {
+            Log.d(TAG, "retrieveAlbum from savedInstanceState");
             albumPos = savedInstanceState.getInt(KEY_ALBUMPOS);
         } else {
             albumPos = getIntent().getIntExtra(KEY_ALBUMPOS,-1);
@@ -111,7 +114,6 @@ public class AlbumActivity extends BaseActivity {
 
     private void getAlbumError(){
         //todo get album error
-
     }
 
     /**
@@ -160,13 +162,35 @@ public class AlbumActivity extends BaseActivity {
                 } else {
                     selectedItemCount.setTitle(""+selectionTracker.getSelection().size());
                 }
-                Iterator<AlbumItem> itemIterable = selectionTracker.getSelection().iterator();
-                while (itemIterable.hasNext()) {
-                    Log.i(TAG, itemIterable.next().getName());
-                }
+//                Iterator<AlbumItem> itemIterable = selectionTracker.getSelection().iterator();
+//                //todo log path here tobe del
+//                while (itemIterable.hasNext()) {
+//                    Log.i(TAG, itemIterable.next().getPath());
+//                }
             }
         });
         recyclerViewAdapter.setSelectionTracker(selectionTracker);
+    }
+
+    private void selectAll(){
+        selectionTracker.setItemsSelected(recyclerViewAdapter.getData().getAlbumItems(),true);
+//        for(AlbumItem albumItem:recyclerViewAdapter.getData().getAlbumItems()){
+//            selectionTracker.select(albumItem);
+//        }
+    }
+
+    private AlbumItem[] getSelectionAlbumItem(){
+        if(!selectionTracker.getSelection().isEmpty()){
+            AlbumItem[] files = new AlbumItem[selectionTracker.getSelection().size()];
+            int i = 0;
+            for (Object obj:selectionTracker.getSelection())
+                if(obj instanceof AlbumItem){
+                    Log.d(TAG, ((AlbumItem)obj).getPath());
+                    files[i++] = (AlbumItem)obj;
+                }
+            return files;
+        }
+        return null;
     }
 
     /**
@@ -196,12 +220,27 @@ public class AlbumActivity extends BaseActivity {
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        AlbumItem[] got = getSelectionAlbumItem();
         switch (item.getItemId()){
             case android.R.id.home:
                 onBackPressed();
                 return true;
             case R.id.action_clear:
                 selectionTracker.clearSelection();
+                break;
+            case R.id.action_del:
+                //todo DELETE remain black block in album
+                if(got!=null)
+                    Delete.start(getApplicationContext(),got);
+                selectionTracker.clearSelection();
+                break;
+            case R.id.action_add_color_tag:
+                if(got!=null)
+                    AddColorTag.start(getApplicationContext(),got);
+                selectionTracker.clearSelection();
+                break;
+            case R.id.action_select_all:
+                selectAll();
                 break;
         }
         return super.onOptionsItemSelected(item);

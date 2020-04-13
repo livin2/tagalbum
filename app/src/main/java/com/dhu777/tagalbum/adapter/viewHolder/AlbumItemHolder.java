@@ -1,8 +1,11 @@
 package com.dhu777.tagalbum.adapter.viewHolder;
 
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -13,6 +16,7 @@ import com.dhu777.tagalbum.data.entity.AlbumBucket;
 import com.dhu777.tagalbum.data.entity.AlbumItem;
 import com.dhu777.tagalbum.data.entity.Gif;
 import com.dhu777.tagalbum.data.entity.Picture;
+import com.dhu777.tagalbum.util.UiUtil;
 
 /**
  * 缩略图视图持有类.
@@ -71,6 +75,50 @@ public class AlbumItemHolder extends RecyclerView.ViewHolder {
                 .apply(albumItem.getGlideRequestOptions(imageView.getContext()))
                 .into(imageView);
     }
+    private boolean selected = false;
+    private Drawable selectorOverlay;
+    public void setSelected(boolean selected) {
+        boolean animate = this.selected != selected;
+//        boolean animate = false;
+        this.selected = selected;
+        if (animate) {
+            animateSelected();
+        }
+    }
 
+    private void animateSelected() {
+        final View imageView = itemView.findViewById(R.id.image);
+
+        float scale = selected ? 0.8f : 1.0f;
+        imageView.animate()
+                .scaleX(scale)
+                .scaleY(scale)
+                .start();
+
+        if (selectorOverlay == null) {
+            selectorOverlay = AppCompatResources.getDrawable(imageView.getContext(),
+                    R.drawable.item_select_overlay);
+        }
+        Log.d("animateSelected", "animateSelected: "+selectorOverlay);
+        if (selected) {
+            imageView.post(new Runnable() {
+                @Override
+                public void run() {
+                    imageView.getOverlay().remove(selectorOverlay);
+                    selectorOverlay.setBounds(0, 0,
+                            imageView.getWidth(),
+                            imageView.getHeight());
+                    imageView.getOverlay().add(selectorOverlay);
+                }
+            });
+        } else {
+            imageView.post(new Runnable() {
+                @Override
+                public void run() {
+                    imageView.getOverlay().remove(selectorOverlay);
+                }
+            });
+        }
+    }
 
 }

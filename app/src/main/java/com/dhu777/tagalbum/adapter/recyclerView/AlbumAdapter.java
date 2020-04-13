@@ -49,7 +49,7 @@ public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
         return this;
     }
 
-    private boolean isViewPage = true;
+    private boolean isViewPage = false;
     public AlbumAdapter setViewPage(boolean viewPage) {
         isViewPage = viewPage;
         return this;
@@ -105,7 +105,7 @@ public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
         final AlbumItem item = getData().getAlbumItems().get(position);
         final AlbumItemHolder holder = (AlbumItemHolder)viewHolder;
         holder.setAlbumItem(item);
-        holder.itemView.setActivated(selectionTracker.isSelected(item));
+        holder.setSelected(selectionTracker.isSelected(item));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

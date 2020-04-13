@@ -44,6 +44,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service
+            android:name=".opt.Delete"
+            android:exported="false" />
+        <service
+            android:name=".opt.AddColorTag"
+            android:exported="false" />
     </application>
 
 </manifest>
