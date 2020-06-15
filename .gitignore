@@ -78,3 +78,5 @@ lint/tmp/
 # lint/reports/
 
 *.apk #optional
+
+app/release/
