@@ -2,6 +2,7 @@ package com.dhu777.tagalbum.adapter.recyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import com.github.chrisbanes.photoview.PhotoView;
  * </p>
  */
 public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
+    private static final String TAG = "AlbumAdapter";
 
     /** 相册视图中的缩略图元素的类型: 其它类型.*/
     public static final int VIEW_TYPE_NONE = -1;
@@ -49,7 +51,7 @@ public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
         return this;
     }
 
-    private boolean isViewPage = false;
+    private boolean isViewPage = true;
     public AlbumAdapter setViewPage(boolean viewPage) {
         isViewPage = viewPage;
         return this;
@@ -105,7 +107,8 @@ public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
         final AlbumItem item = getData().getAlbumItems().get(position);
         final AlbumItemHolder holder = (AlbumItemHolder)viewHolder;
         holder.setAlbumItem(item);
-        holder.setSelected(selectionTracker.isSelected(item));
+        if(selectionTracker!=null)
+            holder.setSelected(selectionTracker.isSelected(item));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
