@@ -1,7 +1,9 @@
 package com.dhu777.tagalbum.ui;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -11,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +22,8 @@ import com.dhu777.tagalbum.adapter.recyclerView.MainAdapter;
 import com.dhu777.tagalbum.data.Settings;
 import com.dhu777.tagalbum.data.entity.AlbumBucket;
 import com.dhu777.tagalbum.data.provider.MediaProvider;
+import com.dhu777.tagalbum.opt.ForegoundOperation;
+import com.dhu777.tagalbum.opt.OptResultReceiver;
 import com.dhu777.tagalbum.task.colorAnalysis;
 import com.dhu777.tagalbum.util.Permission;
 
@@ -35,6 +40,7 @@ public class MainActivity extends BaseActivity {
     private MediaProvider mediaProvider;
     private MainAdapter recyclerViewAdapter;
     private boolean scanHidden = false;
+    private BroadcastReceiver mBroadcastReceiver;
 
     /**
      * 在该活动被创建时会被调用.
@@ -49,6 +55,9 @@ public class MainActivity extends BaseActivity {
         setToolbar();
         setAlbums();
         setRecyclerView();
+        mBroadcastReceiver = new OptResultReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,
+                new IntentFilter(ForegoundOperation.Constants.BROADCAST_ACTION));
     }
 
     /**
@@ -58,6 +67,12 @@ public class MainActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         refreshPhotos();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
     /**

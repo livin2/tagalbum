@@ -13,14 +13,28 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.dhu777.tagalbum.R;
 import com.dhu777.tagalbum.data.entity.AlbumItem;
 
+import java.util.Locale;
+import java.util.concurrent.BlockingDeque;
+
 public abstract class ForegoundOperation extends IntentService {
     private static final String TAG = "ForegoundOperation";
     public static final String FILES = "com.dhu777.tagalbum.extra.FILES";
-    private static final int NOTIFICATION_ID = 2777;
+    public static final int NOTIFICATION_ID = 2777;
+
+    public static final class Constants {
+        public static final String BROADCAST_ACTION = "com.dhu777.tagalbum.OPT_FINISHED";
+        public static final String EXTRA_STATUS = "com.dhu777.tagalbum.OPT_STATUS";
+        public static final int STATUS_SUCCESS = 0;
+        public static final int STATUS_FAIL = 1;
+        public static final String EXTRA_DATA_MSG = "com.dhu777.tagalbum.OPT_RESULT";
+        public static final String EXTRA_DATA_TITLE = "com.dhu777.tagalbum.OPT_TITLE";
+        public static final String EXTRA_DATA_ICON = "com.dhu777.tagalbum.OPT_ICON";
+    }
 
     public abstract void execute(Intent workIntent);
     public abstract String getNotificationTitle();
@@ -30,6 +44,7 @@ public abstract class ForegoundOperation extends IntentService {
         super("ForegoundOperation");
     }
 
+
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         Notification notification = getNotificationBuilder()
@@ -37,8 +52,8 @@ public abstract class ForegoundOperation extends IntentService {
                 .build();
         startForeground(NOTIFICATION_ID, notification);
         execute(intent);
-// todo  sendDoneBroadcast();
-        stopForeground(true);
+        // todo  sendDoneBroadcast();
+        stopForeground(true); //duplicated
     }
 
     public static AlbumItem[] getFiles(Intent workIntent) {
@@ -92,5 +107,30 @@ public abstract class ForegoundOperation extends IntentService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (manager != null)
             manager.notify(NOTIFICATION_ID, notifBuilder.build());
+    }
+
+    public void onSuccess(int success_count){
+        Intent intent = new Intent();
+        intent.setAction(Constants.BROADCAST_ACTION);
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.opt_finished)).append(success_count);
+        intent.putExtra(Constants.EXTRA_DATA_MSG,sb.toString());
+        intent.putExtra(Constants.EXTRA_DATA_TITLE,getNotificationTitle());
+        intent.putExtra(Constants.EXTRA_DATA_ICON,getNotificationSmallIconRes());
+        intent.putExtra(Constants.EXTRA_STATUS,Constants.STATUS_SUCCESS);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+        Log.d(TAG, "onSuccess: ");
+    }
+
+    public void onFail(String filename){
+        Intent intent = new Intent();
+        intent.setAction(Constants.BROADCAST_ACTION);
+        StringBuilder sb = new StringBuilder();
+        sb.append(getString(R.string.opt_fail)).append(filename);
+        intent.putExtra(Constants.EXTRA_DATA_MSG,sb.toString());
+        intent.putExtra(Constants.EXTRA_DATA_TITLE,getNotificationTitle());
+        intent.putExtra(Constants.EXTRA_DATA_ICON,getNotificationSmallIconRes());
+        intent.putExtra(Constants.EXTRA_STATUS,Constants.STATUS_FAIL);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

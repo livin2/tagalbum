@@ -15,4 +15,6 @@
     <string name="move">移动</string>
     <string name="clear">清除</string>
     <string name="select_all">全选</string>
+    <string name="opt_finished">操作完成：</string>
+    <string name="opt_fail">操作失败：</string>
 </resources>

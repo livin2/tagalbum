@@ -43,9 +43,10 @@ public class AddColorTag extends ForegoundOperation{
                 success_count++;
                 onProgress(success_count, itemsToOpt.length);
             } else {
-                ;//todo add failed
+                onFail(item.getName());
             }
         }
+        onSuccess(success_count);
         if (success_count == 0)
             onProgress(success_count, itemsToOpt.length);
     }
