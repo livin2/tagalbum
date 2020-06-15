@@ -23,7 +23,8 @@ import java.util.concurrent.BlockingDeque;
 
 public abstract class ForegoundOperation extends IntentService {
     private static final String TAG = "ForegoundOperation";
-    public static final String FILES = "com.dhu777.tagalbum.extra.FILES";
+    public static final String FILES = "com.dhu777.tagalbum.OPT_FILES";
+    public static final String TARGETS = "com.dhu777.tagalbum.OPT_TARGETS";
     public static final int NOTIFICATION_ID = 2777;
 
     public static final class Constants {
@@ -34,6 +35,7 @@ public abstract class ForegoundOperation extends IntentService {
         public static final String EXTRA_DATA_MSG = "com.dhu777.tagalbum.OPT_RESULT";
         public static final String EXTRA_DATA_TITLE = "com.dhu777.tagalbum.OPT_TITLE";
         public static final String EXTRA_DATA_ICON = "com.dhu777.tagalbum.OPT_ICON";
+
     }
 
     public abstract void execute(Intent workIntent);
@@ -122,11 +124,11 @@ public abstract class ForegoundOperation extends IntentService {
         Log.d(TAG, "onSuccess: ");
     }
 
-    public void onFail(String filename){
+    public void onFail(String msg){
         Intent intent = new Intent();
         intent.setAction(Constants.BROADCAST_ACTION);
         StringBuilder sb = new StringBuilder();
-        sb.append(getString(R.string.opt_fail)).append(filename);
+        sb.append(getString(R.string.opt_fail)).append(msg);
         intent.putExtra(Constants.EXTRA_DATA_MSG,sb.toString());
         intent.putExtra(Constants.EXTRA_DATA_TITLE,getNotificationTitle());
         intent.putExtra(Constants.EXTRA_DATA_ICON,getNotificationSmallIconRes());

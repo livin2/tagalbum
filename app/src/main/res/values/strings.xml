@@ -17,4 +17,8 @@
     <string name="select_all">全选</string>
     <string name="opt_finished">操作完成：</string>
     <string name="opt_fail">操作失败：</string>
+    <string name="dir_no_exists">目录不存在</string>
+    <string name="fail_create_file">无法创建文件</string>
+    <string name="io_exception">IO错误</string>
+    <string name="fail">失败</string>
 </resources>

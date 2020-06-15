@@ -1,9 +1,14 @@
 package com.dhu777.tagalbum.ui;
 
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 import androidx.appcompat.view.ActionMode;
 
 import android.view.Menu;
@@ -31,10 +36,13 @@ import com.dhu777.tagalbum.data.entity.AlbumBucket;
 import com.dhu777.tagalbum.data.entity.AlbumItem;
 import com.dhu777.tagalbum.data.provider.MediaProvider;
 import com.dhu777.tagalbum.opt.AddColorTag;
+import com.dhu777.tagalbum.opt.Copy;
 import com.dhu777.tagalbum.opt.Delete;
 import com.dhu777.tagalbum.util.Permission;
 
 import java.util.Iterator;
+
+import static android.provider.DocumentsContract.Document.FLAG_DIR_SUPPORTS_CREATE;
 
 /**
  * 相册Activity页面组件.本页面显示某个相簿所有的缩略图.
@@ -43,6 +51,7 @@ public class AlbumActivity extends BaseActivity {
     public static final String KEY_ALBUMPOS = "ALBUMPOS";
     public static final String KEY_ALBUM = "ALBUM";
     private static final String TAG = "AlbumActivity";
+    private static final int REQUEST_CODE_COPY = 44;
     private AlbumBucket album;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
@@ -242,8 +251,36 @@ public class AlbumActivity extends BaseActivity {
             case R.id.action_select_all:
                 selectAll();
                 break;
+            case R.id.action_cpy:
+                openDirectory(REQUEST_CODE_COPY);
+//                Copy.start(getApplicationContext(),got);
+                break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public void openDirectory(int requestCode) {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+        intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+                | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+        intent.addFlags(FLAG_DIR_SUPPORTS_CREATE);
+        startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        super.onActivityResult(requestCode, resultCode, resultData);
+        if (requestCode == REQUEST_CODE_COPY && resultCode == Activity.RESULT_OK) {
+            if (resultData != null) {
+                Uri uri = resultData.getData();
+                AlbumItem[] got = getSelectionAlbumItem();
+                Log.d(TAG, "onActivityResult: "+uri);
+                Log.d(TAG, "onActivityResult: "+got.length);
+                Copy.start(getApplicationContext(),got,uri);
+                selectionTracker.clearSelection();
+            }
+        }
     }
 
     /**

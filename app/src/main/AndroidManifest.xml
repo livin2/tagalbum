@@ -53,7 +53,7 @@
             </intent-filter>
         </receiver>
         <service
-            android:name=".opt.Delete"
+            android:name=".opt.Copy"
             android:exported="false" />
         <service
             android:name=".opt.AddColorTag"
