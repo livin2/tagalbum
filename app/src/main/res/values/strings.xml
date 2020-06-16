@@ -21,4 +21,5 @@
     <string name="fail_create_file">无法创建文件</string>
     <string name="io_exception">IO错误</string>
     <string name="fail">失败</string>
+    <string name="fail_del_tag">删除标签失败</string>
 </resources>

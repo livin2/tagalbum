@@ -23,6 +23,7 @@ public class AsyncRepository  extends TagRepository{
     private static final String TAG = "AsyncRepository";
     private static TagRepository INSTANCE;
     private AppDataBase DB;
+
     private AsyncRepository(){}
     public static TagRepository getInstance(@NonNull final Context context) {
         if (INSTANCE==null){
@@ -56,6 +57,11 @@ public class AsyncRepository  extends TagRepository{
             }
         }).execute();
         return true;
+    }
+
+    @Override
+    public boolean deleteMedia(MediaInfo media) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -150,17 +156,17 @@ public class AsyncRepository  extends TagRepository{
     //todo unimplement
     @Override
     public List<Tag> getAllTags() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<MediaInfo> getAllMedia() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<TagJoin> getAllTagJoins() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override

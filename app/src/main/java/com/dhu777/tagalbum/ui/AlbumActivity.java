@@ -42,7 +42,7 @@ import com.dhu777.tagalbum.util.Permission;
 
 import java.util.Iterator;
 
-import static android.provider.DocumentsContract.Document.FLAG_DIR_SUPPORTS_CREATE;
+import static android.provider.DocumentsContract.Document;
 
 /**
  * 相册Activity页面组件.本页面显示某个相簿所有的缩略图.
@@ -52,6 +52,7 @@ public class AlbumActivity extends BaseActivity {
     public static final String KEY_ALBUM = "ALBUM";
     private static final String TAG = "AlbumActivity";
     private static final int REQUEST_CODE_COPY = 44;
+    private static final int REQUEST_CODE_MOVE = 46;
     private AlbumBucket album;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
@@ -239,14 +240,14 @@ public class AlbumActivity extends BaseActivity {
                 break;
             case R.id.action_del:
                 //todo DELETE remain black block in album
+                selectionTracker.clearSelection();
                 if(got!=null)
                     Delete.start(getApplicationContext(),got);
-                selectionTracker.clearSelection();
                 break;
             case R.id.action_add_color_tag:
+                selectionTracker.clearSelection();
                 if(got!=null)
                     AddColorTag.start(getApplicationContext(),got);
-                selectionTracker.clearSelection();
                 break;
             case R.id.action_select_all:
                 selectAll();
@@ -264,7 +265,8 @@ public class AlbumActivity extends BaseActivity {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-        intent.addFlags(FLAG_DIR_SUPPORTS_CREATE);
+        if(requestCode == REQUEST_CODE_COPY)
+            intent.addFlags(Document.FLAG_DIR_SUPPORTS_CREATE);
         startActivityForResult(intent, requestCode);
     }
 

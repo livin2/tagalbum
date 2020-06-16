@@ -19,6 +19,7 @@ import java.util.List;
 public abstract class TagRepository {
     public abstract boolean insertTag(final Tag tag);
     public abstract boolean insertMedia(final MediaInfo media);
+    public abstract boolean deleteMedia(final MediaInfo media);
     public abstract boolean insertTagJoin(TagJoin tagJoin);
 
     public abstract boolean insertTagForMedia(final MediaInfo media,final String tag);
