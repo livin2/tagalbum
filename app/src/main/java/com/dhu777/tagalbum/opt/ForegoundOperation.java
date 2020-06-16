@@ -100,8 +100,10 @@ public abstract class ForegoundOperation extends IntentService {
 
     public void onProgress(final int progress, final int totalNumber) {
         NotificationCompat.Builder notifBuilder = getNotificationBuilder();
-        if (progress >= 0)
+        if (progress >= 0){
+            notifBuilder.setContentText(String.format("%d / %d", progress,totalNumber));
             notifBuilder.setProgress(totalNumber, progress, false);
+        }
         else
             notifBuilder.setProgress(0, 0, true);
 

@@ -4,24 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.provider.DocumentsContract;
-import android.util.Log;
-
 import androidx.documentfile.provider.DocumentFile;
-
 import com.dhu777.tagalbum.R;
 import com.dhu777.tagalbum.data.entity.AlbumItem;
 import com.dhu777.tagalbum.util.FileUtil;
-
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.Objects;
-
 
 public class Copy extends ForegoundOperation {
     public static final String TAG = "ForegoundOperation.Copy";
@@ -43,9 +33,8 @@ public class Copy extends ForegoundOperation {
         String docId = DocumentsContract.getTreeDocumentId(treeUri);
         Uri dirUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, docId);
 
-        Log.d(TAG, "itemPath: "+itemsToOpt[0].getPath());
-        Log.d(TAG, "itemUri: "+itemsToOpt[0].getUri());
         int suc_cot = 0;
+        onProgress(suc_cot, itemsToOpt.length);
         for(AlbumItem item:itemsToOpt) {
             curFileName = item.getName();
             String mimeType = FileUtil.getMimeType(getContentResolver(),item.getUri());
@@ -62,6 +51,7 @@ public class Copy extends ForegoundOperation {
                             getContentResolver().openFileDescriptor(newfile.getUri(),"w").getFileDescriptor())) {
                         FileUtil.Copy(inputStream,outputStream);
                         suc_cot++;
+                        onProgress(suc_cot, itemsToOpt.length);
                     }
                 }
             }catch (FileNotFoundException e) {

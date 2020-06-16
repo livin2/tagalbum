@@ -47,8 +47,6 @@ public class AddColorTag extends ForegoundOperation{
             }
         }
         onSuccess(success_count);
-        if (success_count == 0)
-            onProgress(success_count, itemsToOpt.length);
     }
 
     @Override
