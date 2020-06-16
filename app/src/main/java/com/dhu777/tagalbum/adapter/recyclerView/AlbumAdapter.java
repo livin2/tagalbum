@@ -104,26 +104,31 @@ public class AlbumAdapter extends BaseAdapter<AlbumBucket> {
      */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, final int position) {
-        final AlbumItem item = getData().getAlbumItems().get(position);
-        final AlbumItemHolder holder = (AlbumItemHolder)viewHolder;
+        AlbumItem item = getData().getAlbumItems().get(position);
+        AlbumItemHolder holder = (AlbumItemHolder)viewHolder;
+        Log.d(TAG, "onBindViewHolder: "+position);
+        Log.d(TAG, "onBindViewHolder: "+item.getName());
         holder.setAlbumItem(item);
         if(selectionTracker!=null)
             holder.setSelected(selectionTracker.isSelected(item));
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context context =  holder.itemView.getContext();
                 //todo edit
                 Intent intent;
                 if(isViewPage){
-                    intent = new Intent(context, PhotoViewPageActivity.class);
+                    intent = new Intent(v.getContext(), PhotoViewPageActivity.class);
                     intent.putExtra(AlbumActivity.KEY_ALBUMPOS,albumPos);
                 }else
-                    intent = new Intent(context, PhotoPureActivity.class);
-                intent.putExtra(PhotoActivity.KEY_PHOTO,item);
-                intent.putExtra(PhotoActivity.KEY_PHOTOPOS,position);
+                    intent = new Intent(v.getContext(), PhotoPureActivity.class);
+                AlbumItem it = holder.getAlbumItem();
+                intent.putExtra(PhotoActivity.KEY_PHOTO,it);
+                Log.d(TAG, "onClick 0: "+getData().getAlbumItems().get(0).getName());
+                Log.d(TAG, "onClick this: "+it.getName());
+                Log.d(TAG, "onClick: "+getData().getAlbumItems().indexOf(it));
+                intent.putExtra(PhotoActivity.KEY_PHOTOPOS,getData().getAlbumItems().indexOf(it));
 
-                context.startActivity(intent);
+                v.getContext().startActivity(intent);
             }
         });
     }

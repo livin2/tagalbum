@@ -41,6 +41,7 @@ import com.dhu777.tagalbum.opt.Delete;
 import com.dhu777.tagalbum.util.Permission;
 
 import java.util.Iterator;
+import java.util.List;
 
 import static android.provider.DocumentsContract.Document;
 
@@ -231,6 +232,7 @@ public class AlbumActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         AlbumItem[] got = getSelectionAlbumItem();
+
         switch (item.getItemId()){
             case android.R.id.home:
                 onBackPressed();
@@ -241,8 +243,9 @@ public class AlbumActivity extends BaseActivity {
             case R.id.action_del:
                 //todo DELETE remain black block in album
                 selectionTracker.clearSelection();
-                if(got!=null)
-                    Delete.start(getApplicationContext(),got);
+//                if(got!=null)
+//                    Delete.start(getApplicationContext(),got);
+                delItem(got);
                 break;
             case R.id.action_add_color_tag:
                 selectionTracker.clearSelection();
@@ -260,6 +263,15 @@ public class AlbumActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void delItem(AlbumItem[] got){
+        Log.d(TAG, "testDelBefore: "+album.getAlbumItems().size());
+        Delete.start(getApplicationContext(),got);
+        for (AlbumItem item:got){
+            recyclerViewAdapter.notifyItemRemoved(album.getAlbumItems().indexOf(item));
+            album.getAlbumItems().remove(item);
+        }
+        recyclerViewAdapter.notifyItemRangeChanged(0,album.getAlbumItems().size());
+    }
 
     public void openDirectory(int requestCode) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
