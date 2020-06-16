@@ -16,6 +16,7 @@ import com.dhu777.tagalbum.util.UiUtil;
 
 public class OptResultReceiver extends BroadcastReceiver {
     private static final String TAG = "OptResultReceiver";
+    private static final int NOTIFICATION_ID = 2772;
     @Override
     public void onReceive(Context context, Intent intent) {
         int status = intent.getIntExtra(ForegoundOperation.Constants.EXTRA_STATUS,
@@ -25,7 +26,7 @@ public class OptResultReceiver extends BroadcastReceiver {
                 R.drawable.ic_launcher_foreground);
         String extra_msg = intent.getStringExtra(ForegoundOperation.Constants.EXTRA_DATA_MSG);
         Log.d(TAG, "onReceive: "+extra_msg);
-        UiUtil.showNotification(context,extra_title,extra_msg,extra_icon,ForegoundOperation.NOTIFICATION_ID);
+        UiUtil.showNotification(context,extra_title,extra_msg,extra_icon,NOTIFICATION_ID);
 //        switch (status){
 //            case ForegoundOperation.Constants.STATUS_SUCCESS:
 //                break;

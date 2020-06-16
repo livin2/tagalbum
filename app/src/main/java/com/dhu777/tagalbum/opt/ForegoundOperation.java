@@ -77,7 +77,8 @@ public abstract class ForegoundOperation extends IntentService {
         }
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this,
                 getString(R.string.op_channel_id))
-                .setContentTitle(getNotificationTitle());
+                .setContentTitle(getNotificationTitle())
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
         builder.setSmallIcon(getNotificationSmallIconRes());
         mBuilder = builder;

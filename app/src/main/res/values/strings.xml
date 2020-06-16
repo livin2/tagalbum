@@ -22,4 +22,6 @@
     <string name="io_exception">IO错误</string>
     <string name="fail">失败</string>
     <string name="fail_del_tag">删除标签失败</string>
+    <string name="notification_channel_id">notification_channel_id</string>
+    <string name="notification_channel_name">Default Notifications</string>
 </resources>
