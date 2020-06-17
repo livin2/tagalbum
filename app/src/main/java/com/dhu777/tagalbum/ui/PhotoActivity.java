@@ -31,7 +31,9 @@ import com.dhu777.tagalbum.data.entity.AlbumItem;
 import com.dhu777.tagalbum.data.TagViewModel;
 import com.dhu777.tagalbum.data.entity.Gif;
 import com.dhu777.tagalbum.data.persistent.entity.Tag;
+import com.dhu777.tagalbum.data.persistent.entity.TagJoin;
 import com.dhu777.tagalbum.data.persistent.entity.TagView;
+import com.dhu777.tagalbum.data.persistent.repository.AsyncRepository;
 import com.dhu777.tagalbum.util.ColorTag;
 import com.dhu777.tagalbum.util.PaletteHelper;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -112,7 +114,9 @@ public class PhotoActivity extends BaseActivity {
                 public void onClick(View v) {
                     TagView tv = (TagView) v.getTag();
                     if(tv!=null){
-                        tagViewModel.deleteTagJoin(tv.getMediaId(),tv.getTagId());
+//                        tagViewModel.deleteTagJoin(tv.getMediaId(),tv.getTagId());
+                        AsyncRepository.getInstance(getApplicationContext())
+                                .deleteTagJoin(new TagJoin(tv.getMediaId(),tv.getTagId()));
                     }
                 }
             });
@@ -156,7 +160,8 @@ public class PhotoActivity extends BaseActivity {
             return;
         }
 
-        tagViewModel.insertTagForMedia(photo,text);
+        AsyncRepository.getInstance(getApplicationContext()).insertTagForMedia(photo,text);
+//        tagViewModel.insertTagForMedia(photo,text);
 //        chip.setText(text);
 //        chip.setOnCloseIconClickListener(new View.OnClickListener() {
 //            @Override
