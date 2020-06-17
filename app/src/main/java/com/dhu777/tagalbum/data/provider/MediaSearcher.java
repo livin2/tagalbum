@@ -131,15 +131,15 @@ public class MediaSearcher {
                 cursor.close();
 
                 if (callback != null) {
-                    Log.d(TAG, "AsyncTask run callback");
+                    Log.v(TAG, "AsyncTask run callback");
                     callback.onMediaLoaded(albums);
                 }
 
-                Log.d(TAG, "Asyncload(): "
+                Log.v(TAG, "Asyncload(): "
                         + counter
                         + " items");
                 //todo test Asyncload time
-                Log.d(TAG, "Asyncload(): "
+                Log.v(TAG, "Asyncload(): "
                         + String.valueOf(System.currentTimeMillis() - startTime)
                         + " ms");
             }

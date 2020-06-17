@@ -31,9 +31,9 @@ public abstract class TagRepository {
     public abstract List<Tag> getAllTags();
     public abstract List<MediaInfo> getAllMedia();
     public abstract List<TagJoin> getAllTagJoins();
-    public abstract LiveData<List<TagView>> getTagByMedia(long mediaId);
+    public abstract List<TagView> getTagByMedia(long mediaId);
 //    public abstract LiveData<List<TagView>> getTagByTagVal(String value);
-    public abstract LiveData<List<TagView>> getTagByTagList(List<String> value);
+    public abstract List<TagView> getTagByTagList(List<String> value);
 
     //test
     public abstract void logAll();

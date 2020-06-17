@@ -149,8 +149,9 @@ public class AsyncRepository  extends TagRepository{
 
 
     @Override
-    public LiveData<List<TagView>> getTagByMedia(long mediaId) {
-        return DB.tagViewDao().getByMediaId(mediaId);
+    public List<TagView> getTagByMedia(long mediaId) {
+//        return DB.tagViewDao().getByMediaId(mediaId);
+        throw new UnsupportedOperationException();
     }
 
 
@@ -159,8 +160,9 @@ public class AsyncRepository  extends TagRepository{
 //    }
 
     @Override
-    public LiveData<List<TagView>> getTagByTagList(List<String> value) {
-        return DB.tagViewDao().getByTagList(value,value.size());
+    public List<TagView> getTagByTagList(List<String> value) {
+//        return DB.tagViewDao().getByTagList(value,value.size());
+        throw new UnsupportedOperationException();
     }
 
     //todo unimplement

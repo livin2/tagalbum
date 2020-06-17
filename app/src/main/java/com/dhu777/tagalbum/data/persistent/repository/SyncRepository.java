@@ -17,11 +17,9 @@ import java.util.List;
 
 /**
  *
- * @deprecated 该类实现的所有的数据库操作都是同步的.这意味着数据库操作将阻塞UI线程,
+ * 该类实现的所有的数据库操作都是同步的.这意味着数据库操作将阻塞UI线程,
  * 如果数据库操作时间较长将导致UI活动未响应.一般应当使用{@link AsyncRepository}进行数据库操作.
  */
-//todo need entire test to prevent crash
-@Deprecated
 public class SyncRepository extends TagRepository {
     private static final String TAG = "SyncRepository";
     private static TagRepository INSTANCE;
@@ -100,8 +98,8 @@ public class SyncRepository extends TagRepository {
     }
 
     @Override
-    public LiveData<List<TagView>> getTagByMedia(long mediaId) {
-        return DB.tagViewDao().getByMediaId(mediaId);
+    public List<TagView> getTagByMedia(long mediaId) {
+        throw new UnsupportedOperationException();
     }
     //todo unimplement
 
@@ -147,8 +145,8 @@ public class SyncRepository extends TagRepository {
     }
 
     @Override
-    public LiveData<List<TagView>> getTagByTagList(List<String> value) {
-        throw new UnsupportedOperationException();
+    public List<TagView> getTagByTagList(List<String> value) {
+        return DB.tagViewDao().getByTagListSync(value,value.size());
     }
 
     @Override

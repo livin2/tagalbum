@@ -50,4 +50,18 @@ public interface TagViewDao {
     @Query("SELECT * FROM TagView WHERE  tagVal IN (:valList) " +
             "GROUP BY mediaId HAVING COUNT(mediaId) >= (:count)")
     public LiveData<List<TagView>> getByTagList(List<String> valList,int count);
+
+    /**
+     * 查询符合vallist中所有标签值的图片.
+     * <p>
+     *     SQL: SELECT * FROM TagView WHERE  tagVal IN (:valList)
+     *      * GROUP BY mediaId HAVING COUNT(mediaId) >= (:count)
+     * </p>
+     * @param valList 标签值列表
+     * @param count 标签值的个数
+     * @return 返回支持监听数据变换的类型LiveData.
+     */
+    @Query("SELECT * FROM TagView WHERE  tagVal IN (:valList) " +
+            "GROUP BY mediaId HAVING COUNT(mediaId) >= (:count)")
+    public List<TagView> getByTagListSync(List<String> valList,int count);
 }
