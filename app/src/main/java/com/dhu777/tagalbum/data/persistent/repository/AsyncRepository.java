@@ -53,7 +53,7 @@ public class AsyncRepository  extends TagRepository{
             @Override
             public void doInBackground() {
                 DB.mediaDao().insert(media);
-                Log.d(TAG, "insertMedia:"+media.getName());
+//                Log.d(TAG, "insertMedia:"+media.getName());
             }
         }).execute();
         return true;
@@ -61,6 +61,11 @@ public class AsyncRepository  extends TagRepository{
 
     @Override
     public boolean deleteMedia(MediaInfo media) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean deleteMedia(long mediaid) {
         throw new UnsupportedOperationException();
     }
 
@@ -135,6 +140,11 @@ public class AsyncRepository  extends TagRepository{
             }
         }).execute();
         return true;
+    }
+
+    @Override
+    public boolean updateTagJoinId(long oldId, long newId) {
+        throw new UnsupportedOperationException();
     }
 
 

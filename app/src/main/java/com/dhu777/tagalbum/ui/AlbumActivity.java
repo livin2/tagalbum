@@ -38,6 +38,7 @@ import com.dhu777.tagalbum.data.provider.MediaProvider;
 import com.dhu777.tagalbum.opt.AddColorTag;
 import com.dhu777.tagalbum.opt.Copy;
 import com.dhu777.tagalbum.opt.Delete;
+import com.dhu777.tagalbum.opt.Move;
 import com.dhu777.tagalbum.util.Permission;
 
 import java.util.Iterator;
@@ -245,7 +246,8 @@ public class AlbumActivity extends BaseActivity {
                 selectionTracker.clearSelection();
 //                if(got!=null)
 //                    Delete.start(getApplicationContext(),got);
-                delItem(got);
+                Delete.start(getApplicationContext(),got);
+                RemoveItemFromView(got);
                 break;
             case R.id.action_add_color_tag:
                 selectionTracker.clearSelection();
@@ -259,13 +261,14 @@ public class AlbumActivity extends BaseActivity {
                 openDirectory(REQUEST_CODE_COPY);
 //                Copy.start(getApplicationContext(),got);
                 break;
+            case R.id.action_move:
+                openDirectory(REQUEST_CODE_MOVE);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void delItem(AlbumItem[] got){
-        Log.d(TAG, "testDelBefore: "+album.getAlbumItems().size());
-        Delete.start(getApplicationContext(),got);
+    private void RemoveItemFromView(AlbumItem[] got){
         for (AlbumItem item:got){
             recyclerViewAdapter.notifyItemRemoved(album.getAlbumItems().indexOf(item));
             album.getAlbumItems().remove(item);
@@ -277,8 +280,7 @@ public class AlbumActivity extends BaseActivity {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-        if(requestCode == REQUEST_CODE_COPY)
-            intent.addFlags(Document.FLAG_DIR_SUPPORTS_CREATE);
+        intent.addFlags(Document.FLAG_DIR_SUPPORTS_CREATE);
         startActivityForResult(intent, requestCode);
     }
 
@@ -292,6 +294,14 @@ public class AlbumActivity extends BaseActivity {
                 Log.d(TAG, "onActivityResult: "+uri);
                 Log.d(TAG, "onActivityResult: "+got.length);
                 Copy.start(getApplicationContext(),got,uri);
+                selectionTracker.clearSelection();
+            }
+        }else if (requestCode == REQUEST_CODE_MOVE && resultCode == Activity.RESULT_OK) {
+            if (resultData != null) {
+                Uri uri = resultData.getData();
+                AlbumItem[] got = getSelectionAlbumItem();
+                Move.start(getApplicationContext(),got,uri);
+                RemoveItemFromView(got);
                 selectionTracker.clearSelection();
             }
         }

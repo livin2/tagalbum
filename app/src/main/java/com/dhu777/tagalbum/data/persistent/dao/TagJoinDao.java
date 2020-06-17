@@ -7,6 +7,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.dhu777.tagalbum.data.persistent.entity.TagJoin;
 
@@ -33,6 +34,15 @@ public interface TagJoinDao {
      */
     @Query("SELECT * FROM TagJoin WHERE mediaId = :id")
     public LiveData<List<TagJoin>> getByMediaId(long id);
+
+    /**
+     * SQL:SELECT * FROM TagJoin WHERE mediaId = :id
+     * @param id
+     * @return 根据图片信息id查找图片-标签的关联
+     */
+    @Query("SELECT * FROM TagJoin WHERE mediaId = :id")
+    public List<TagJoin> getByMediaIdOnce(long id);
+
 
     /**
      * SQL:SELECT * FROM TagJoin WHERE tagId = :id

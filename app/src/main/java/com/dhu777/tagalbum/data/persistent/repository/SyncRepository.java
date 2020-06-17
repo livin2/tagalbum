@@ -69,6 +69,13 @@ public class SyncRepository extends TagRepository {
     }
 
     @Override
+    public boolean deleteMedia(long mediaid) {
+        MediaInfo mediaInfo = new MediaInfo();
+        mediaInfo.setId(mediaid);
+        return deleteMedia(mediaInfo);
+    }
+
+    @Override
     public boolean insertTagJoin(TagJoin tagJoin) {
         try{
             return DB.tagJoinDao().insert(tagJoin)!=null;
@@ -118,6 +125,27 @@ public class SyncRepository extends TagRepository {
             DB.tagDao().delete(new Tag(tagJoin.getTagId(),null));
         return true;
     }
+
+    @Override
+    public boolean updateTagJoinId(long oldId, long newId) {
+        //todo DB.runInTransaction
+        MediaInfo media = DB.mediaDao().getById(oldId);
+        if(media == null)return false;
+        media.setId(newId);
+        boolean addRes = insertMedia(media);
+        if (!addRes) return false;
+
+        List<TagJoin> tjlist = DB.tagJoinDao().getByMediaIdOnce(oldId);
+        if(tjlist.size()>0){
+            for (TagJoin tj:tjlist)
+                tj.setMediaId(newId);
+            DB.tagJoinDao().insertList(tjlist);
+        }
+        boolean delRes = deleteMedia(oldId);
+        if (!delRes) return false;
+        return true;
+    }
+
     @Override
     public LiveData<List<TagView>> getTagByTagList(List<String> value) {
         throw new UnsupportedOperationException();

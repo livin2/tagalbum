@@ -56,6 +56,9 @@
             android:name=".opt.Copy"
             android:exported="false" />
         <service
+            android:name=".opt.Move"
+            android:exported="false" />
+        <service
             android:name=".opt.Delete"
             android:exported="false" />
         <service
