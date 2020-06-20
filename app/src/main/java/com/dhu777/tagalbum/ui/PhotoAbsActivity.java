@@ -2,6 +2,7 @@ package com.dhu777.tagalbum.ui;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -29,6 +31,8 @@ import com.dhu777.tagalbum.data.provider.MediaProvider;
 import com.dhu777.tagalbum.util.Permission;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.List;
 
@@ -39,7 +43,6 @@ public abstract class PhotoAbsActivity extends BaseActivity{
     public static final String KEY_PHOTO = "PHOTO";
     public static final String KEY_PHOTOPOS = "PHOTO_POS";
 
-    protected DialogFragment dialogFragment;
     protected AlbumItem photo;
     protected int photoPos;
     protected AlbumBucket album;
@@ -66,12 +69,6 @@ public abstract class PhotoAbsActivity extends BaseActivity{
 
         tagViewModel = new ViewModelProvider(this).get(TagViewModel.class);
         loadTags(photo.getId());
-        dialogFragment = new AddTagsDialogFragment(new AddTagsDialogFragment.Callback() {
-            @Override
-            public void confirm(String text) {
-                addChip(text);
-            }
-        });
         setToolbar();
     }
 
@@ -183,10 +180,19 @@ public abstract class PhotoAbsActivity extends BaseActivity{
                 onBackPressed();
                 return true;
             case R.id.menu_add_tags:
-                dialogFragment.show(getSupportFragmentManager(),"addtag");
+                showDialog();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showDialog(){
+        new AddTagsDialogFragment(new AddTagsDialogFragment.Callback() {
+            @Override
+            public void confirm(String text) {
+                addChip(text);
+            }
+        }).show(getSupportFragmentManager(),"addtag");
     }
 
     /**

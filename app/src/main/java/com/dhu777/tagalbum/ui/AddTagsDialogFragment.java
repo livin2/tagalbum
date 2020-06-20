@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +13,7 @@ import androidx.fragment.app.DialogFragment;
 
 import com.dhu777.tagalbum.R;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 
 /**
@@ -33,10 +35,8 @@ public class AddTagsDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getActivity());
-        LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        View view = inflater.inflate(R.layout.dialog_add_tags,null);
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext());
+        View view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_add_tags,null);
         final TextInputEditText editText = view.findViewById(R.id.tag_input_edittext);
         builder.setView(view)
                 .setPositiveButton("确认", new DialogInterface.OnClickListener() {
