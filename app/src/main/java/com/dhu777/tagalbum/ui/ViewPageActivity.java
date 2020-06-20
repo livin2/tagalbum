@@ -24,6 +24,11 @@ import static com.dhu777.tagalbum.ui.AlbumActivity.KEY_ALBUMPOS;
 import static com.dhu777.tagalbum.ui.PhotoActivity.KEY_PHOTO;
 import static com.dhu777.tagalbum.ui.PhotoActivity.KEY_PHOTOPOS;
 
+
+/**
+ * @deprecated use {@link PhotoViewPageActivity}
+ */
+@Deprecated
 public class ViewPageActivity extends BaseActivity {
     private static final String TAG = "ViewPageActivity";
     private AlbumBucket album;

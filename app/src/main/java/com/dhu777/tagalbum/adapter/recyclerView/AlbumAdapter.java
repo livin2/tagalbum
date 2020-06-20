@@ -21,8 +21,6 @@ import com.dhu777.tagalbum.ui.AlbumActivity;
 import com.dhu777.tagalbum.ui.PhotoActivity;
 import com.dhu777.tagalbum.ui.PhotoPureActivity;
 import com.dhu777.tagalbum.ui.PhotoViewPageActivity;
-import com.dhu777.tagalbum.ui.ViewPageActivity;
-import com.github.chrisbanes.photoview.PhotoView;
 
 /**
  * 缩略图相册列表视图的适配器

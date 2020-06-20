@@ -31,6 +31,7 @@ import com.dhu777.tagalbum.data.entity.AlbumItem;
 import com.dhu777.tagalbum.data.entity.Gif;
 import com.dhu777.tagalbum.data.persistent.entity.TagView;
 import com.dhu777.tagalbum.data.provider.MediaProvider;
+import com.dhu777.tagalbum.ui.animators.TitleFade;
 import com.dhu777.tagalbum.util.ColorTag;
 import com.dhu777.tagalbum.util.PaletteHelper;
 import com.dhu777.tagalbum.util.Permission;
@@ -100,31 +101,36 @@ public class PhotoViewPageActivity extends PhotoAbsActivity {
     }
 
     protected void fadeTitle(final String title){
-        if(toolbar!=null){
-            for (int i = 0; i < toolbar.getChildCount(); i++) {
-                View v = toolbar.getChildAt(i);
-                if (v instanceof TextView) {
-                    titleView = (TextView) v;
-                    break;
-                }
-            }
-        }
-        if(titleView!=null){
-            titleView.animate()
-                    .alpha(0f)
-                    .setDuration(duration)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            titleView.setText(title);
-                            titleView.animate()
-                                    .alpha(1f)
-                                    .setDuration(duration)
-                                    .start();
-                        }
-                    })
-                    .start();
-        }
+        TitleFade.process(toolbar,toolbar1 -> {
+            toolbar.setTitle(title != null ? title : "");
+        });
+//        if(toolbar!=null){
+//            for (int i = 0; i < toolbar.getChildCount(); i++) {
+//                View v = toolbar.getChildAt(i);
+//                if (v instanceof TextView) {
+//                    titleView = (TextView) v;
+//                    break;
+//                }
+//            }
+//        }
+//        if(titleView!=null){
+//            titleView.setText(title);
+//            titleView.animate().cancel();
+//            titleView.animate()
+//                    .alpha(0f)
+//                    .setDuration(duration)
+//                    .setListener(new AnimatorListenerAdapter() {
+//                        @Override
+//                        public void onAnimationEnd(Animator animation) {
+//                            titleView.setText(title);
+//                            titleView.animate()
+//                                    .alpha(1f)
+//                                    .setDuration(duration)
+//                                    .start();
+//                        }
+//                    })
+//                    .start();
+//        }
     }
 
     @Override
