@@ -1,5 +1,6 @@
 package com.dhu777.tagalbum.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Intent;
@@ -276,11 +277,12 @@ public class AlbumActivity extends BaseActivity {
         recyclerViewAdapter.notifyItemRangeChanged(0,album.getAlbumItems().size());
     }
 
+//    @SuppressLint("WrongConstant")
     public void openDirectory(int requestCode) {
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
         intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION
                 | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
-        intent.addFlags(Document.FLAG_DIR_SUPPORTS_CREATE);
+//        intent.addFlags(Document.FLAG_DIR_SUPPORTS_CREATE);
         startActivityForResult(intent, requestCode);
     }
 
