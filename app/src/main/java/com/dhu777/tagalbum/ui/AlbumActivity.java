@@ -132,7 +132,7 @@ public class AlbumActivity extends BaseActivity {
      * 从设置加载参数.
      */
     protected void loadSettings(){
-        columnCount = Settings.getInstance(this).getColumnCount();
+        columnCount = Settings.getInstance(getApplicationContext()).getColumnCount();
     }
 
     /**

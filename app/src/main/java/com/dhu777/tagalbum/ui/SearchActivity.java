@@ -134,9 +134,11 @@ public class SearchActivity extends BaseActivity implements Observer<List<TagVie
     /**
      * 配置主页的标题栏.
      */
+    @Override
     protected void setToolbar(){
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        super.setToolbar();
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
